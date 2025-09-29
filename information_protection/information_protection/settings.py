@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'information_protection',
     'lcg',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
