@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Головна сторінка лабораторних</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <header>
+    <h1>Лабораторні роботи</h1>
+  </header>
+
+  <main class="container">
+<div class="card" onclick="location.href='/lab1/'">
+  <h2>Lab 1</h2>
+  <p>Генератор псевдовипадкових чисел</p>
+</div>
+
+<div class="card" onclick="location.href='/lab2/'">
+  <h2>Lab 2</h2>
+  <p>Перейти до Lab 2</p>
+</div>
+
+<div class="card" onclick="location.href='/lab3/'">
+  <h2>Lab 3</h2>
+  <p>Перейти до Lab 3</p>
+</div>
+
+<div class="card" onclick="location.href='/lab4/'">
+  <h2>Lab 4</h2>
+  <p>Перейти до Lab 4</p>
+</div>
+
+<div class="card" onclick="location.href='/lab5/'">
+  <h2>Lab 5</h2>
+  <p>Перейти до Lab 5</p>
+</div>
+  </main>
+</body>
+</html>
+
+
+
