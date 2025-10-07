@@ -137,3 +137,18 @@ h3 {
     background-color: #00114d;
     transform: scale(1.03);
 }
+
+.error {
+    color: #cc0000;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin: 10px 0;
+    text-align: left;
+}
+
+
+
+
+
+
+
