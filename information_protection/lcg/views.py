@@ -60,5 +60,5 @@ def generate_lcg(request):
             'cesaro_lib_estimate': cesaro_lib
         }
 
-    return render(request, 'lcg.html', {'result': result})
+    return render(request, 'lcg/lcg.html', {'result': result})
 

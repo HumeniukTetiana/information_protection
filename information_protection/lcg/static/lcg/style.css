@@ -1,0 +1,103 @@
+/* ============================= */
+/* Загальні стилі */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0 20px;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #2e86de;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+h2 {
+    color: #2e86de;
+}
+
+h3 {
+    margin-bottom: 5px;
+    color: #34495e;
+}
+
+/* ============================= */
+/* Форма */
+.form-section {
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.form-section form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-section label {
+    flex: 1 0 180px;
+}
+
+.form-section input {
+    flex: 1 0 150px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.form-section button {
+    padding: 10px 20px;
+    background-color: #2e86de;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-section button:hover {
+    background-color: #1b4f72;
+}
+
+/* ============================= */
+/* Результати */
+.result-section {
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.result-block {
+    margin-bottom: 20px;
+}
+
+.numbers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.numbers span {
+    background-color: #d6eaf8;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
