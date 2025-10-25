@@ -1,5 +1,3 @@
-/* ============================= */
-/* Загальні стилі */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f4f8;
@@ -30,16 +28,12 @@ h3 {
     color: #34495e;
 }
 
-/* ============================= */
-/* Центрування блоків */
 .container {
-    max-width: 750px; /* 🔹 Оптимальна ширина */
+    max-width: 750px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* ============================= */
-/* Форма */
 .form-section {
     width: 98%;
     background-color: #fff;
@@ -69,7 +63,6 @@ h3 {
     font-size: 1em;
 }
 
-/* Кнопки */
 .form-section button {
     padding: 12px 30px;
     background-color: #000033;
@@ -88,8 +81,6 @@ h3 {
     transform: scale(1.03);
 }
 
-/* ============================= */
-/* Результати */
 .result-section {
     width: 98%;
     background-color: #fff;
@@ -116,8 +107,6 @@ h3 {
     font-size: 0.9em;
 }
 
-/* ============================= */
-/* Кнопка повернення */
 .back-button {
     display: block;
     width: 250px;

@@ -35,43 +35,6 @@ def lcg_period(m, a, c, x):
         n += 1
     return n
 
-from django.shortcuts import render
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-import random
-import math
-
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
-
-def cesaro(numbers, count):
-    coprime = 0
-    for _ in range(count):
-        i, j = random.sample(numbers, 2)
-        if gcd(i, j) == 1:
-            coprime += 1
-    probability = coprime / count
-    pi_estimate = math.sqrt(6 / probability)
-    return pi_estimate
-
-def lcg_numbers(m, a, c, x, count):
-    numbers = []
-    for _ in range(count):
-        x = (a*x + c) % m
-        numbers.append(x)
-    return numbers
-
-def lcg_period(m, a, c, x):
-    x0 = x
-    n = 1
-    x = (a*x0 + c) % m
-    while x != x0:
-        x = (a*x + c) % m
-        n += 1
-    return n
-
 def generate_lcg(request):
     result = None
     error = None
@@ -83,7 +46,7 @@ def generate_lcg(request):
 
             if count <= 1 or count_estimate <= 1:
                 raise ValueError("Числа повинні бути більше одиниці ")
-            if count > 100_000:
+            if count > 10_000_000:
                 raise ValueError("Значення для генерації чисел більше 100 000")
             if count_estimate > 10_000_000:
                 raise ValueError("Значення для оцінки π більше 10 000 000")
@@ -107,5 +70,13 @@ def generate_lcg(request):
                 'cesaro_estimate': cesaro_estimate,
                 'cesaro_lib_estimate': cesaro_lib
             }
+
+            with open("lcg_results.txt", "w", encoding="utf-8") as f:
+                f.write(f"Кількість чисел: {count}\n")
+                f.write(f"LCG період: {period}\n")
+                f.write(f"Оцінка π (LCG): {cesaro_estimate:.6f}\n")
+                f.write(f"Оцінка π (random): {cesaro_lib:.6f}\n")
+                f.write("Згенеровані числа:\n")
+                f.write(", ".join(map(str, numbers)) + "\n\n")
 
     return render(request, 'lcg/lcg.html', {'result': result, 'error': error})
