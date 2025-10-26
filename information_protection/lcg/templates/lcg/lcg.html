@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор ЛКГ та оцінка числа π</title>
+    <link rel="stylesheet" href="{% static 'lcg/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Генератор Лінійного Конгруентного Генератора та оцінка числа π</h1>
+    </header>
+
+    <main>
+        <section class="form-section">
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+            <form method="get" novalidate>
+                <label for="count">Кількість чисел ЛКГ:</label>
+                <input type="number" id="count" name="count" value="100" min="1">
+
+                <label for="count_estimate">Кількість для оцінки π:</label>
+                <input type="number" id="count_estimate" name="count_estimate" value="100000" min="1">
+
+                <button type="submit">Згенерувати</button>
+            </form>
+        </section>
+
+        {% if result %}
+        <section class="result-section">
+            <h2>Результати</h2>
+
+            <div class="result-block">
+                <h3>Числа ЛКГ:</h3>
+                <div class="numbers">
+                    {% for num in result.numbers %}
+                        <span>{{ num }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="result-block">
+                <h3>Період ЛКГ:</h3>
+                <p>{{ result.lcg_period }}</p>
+            </div>
+
+            <div class="result-block">
+                <h3>Оцінка числа π за методом Чезаро (ЛКГ):</h3>
+                <p>{{ result.cesaro_estimate|floatformat:6 }}</p>
+            </div>
+
+            <div class="result-block">
+                <h3>Оцінка числа π за методом Чезаро (вбудований генератор Python):</h3>
+                <p>{{ result.cesaro_lib_estimate|floatformat:6 }}</p>
+            </div>
+        </section>
+        {% endif %}
+        <a href="{% url 'index' %}" class="back-button">Повернутись на головну</a>
+    </main>
+</body>
+</html>
