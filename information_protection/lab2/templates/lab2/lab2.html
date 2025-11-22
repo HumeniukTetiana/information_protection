@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD5 Хешування та Перевірка файлів</title>
+    <link rel="stylesheet" href="{% static 'lab2/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Сервіс MD5 Хешування та Перевірки</h1>
+    </header>
+
+    <main class="container">
+        <!-- Хешування рядка -->
+        <section class="form-section">
+            <h2>Обчислити MD5 для рядка</h2>
+            <form method="post" action="{% url 'lab2' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="hash_text">
+                <label for="text">Введіть рядок:</label>
+                <textarea id="text" name="text" rows="4">{{ request.POST.text }}</textarea>
+                <button type="submit">Обчислити MD5</button>
+            </form>
+        </section>
+
+        <!-- Хешування файлу -->
+        <section class="form-section">
+            <h2>Обчислити MD5 для файлу</h2>
+            <form method="post" action="{% url 'lab2' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="hash_file">
+                <label for="file">Оберіть файл:</label>
+                <input id="file" name="file" type="file">
+                <button type="submit">Обчислити MD5 файлу</button>
+            </form>
+        </section>
+
+        <!-- Перевірка файлу -->
+        <section class="form-section">
+            <h2>Перевірка цілісності файлу</h2>
+            <form method="post" action="{% url 'lab2' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="verify">
+                <label for="file2">Файл для перевірки:</label>
+                <input id="file2" name="file" type="file">
+
+                <label for="expected">Очікуваний MD5 (або завантажте .md5 файл):</label>
+                <input id="expected" name="expected" type="text" placeholder="Наприклад: D41D8CD98F00B204E9800998ECF8427E">
+                <p>АБО</p>
+                <input id="hashfile" name="hashfile" type="file">
+
+                <button type="submit">Перевірити</button>
+            </form>
+        </section>
+
+        <!-- Виведення результатів -->
+        {% if md5 %}
+        <section class="result-section">
+            <h2>Результат</h2>
+
+            <div class="result-block">
+                <h3>Тип:</h3>
+                <p>{{ kind }}</p>
+            </div>
+
+            <div class="result-block">
+                <h3>Назва файлу / рядок:</h3>
+                <p>{{ name }}</p>
+            </div>
+
+            <div class="result-block">
+                <h3>MD5 (hex, upper):</h3>
+                <p><code>{{ md5 }}</code></p>
+            </div>
+
+            {% if verified is not None %}
+            <div class="result-block">
+                <h3>Перевірка:</h3>
+                {% if verified %}
+                    <p class="success"> файл цілісний</p>
+                {% else %}
+                    <p class="error">FAILED — хеш не збігається</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'download_md5' %}">
+                {% csrf_token %}
+                <input type="hidden" name="md5" value="{{ md5 }}">
+                <input type="hidden" name="name" value="{{ name }}">
+                <button type="submit">Завантажити .md5 файл</button>
+            </form>
+        </section>
+        {% endif %}
+
+    </main>
+</body>
+</html>
