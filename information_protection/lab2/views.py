@@ -66,7 +66,7 @@ def md5_bytes(message_bytes):
         D = (D + d) & 0xFFFFFFFF
 
     # hex
-    return '{:08X}{:08X}{:08X}{:08X}'.format(A, B, C, D)
+    return struct.pack('<4I', A, B, C, D).hex().upper()
 
 
 def md5_for_text(s: str):
