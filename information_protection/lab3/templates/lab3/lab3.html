@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC5 Шифрування/Дешифрування</title>
+    <link rel="stylesheet" href="{% static 'lab3/style.css' %}">
+    <style>
+        body { font-family: Arial; margin: 20px; background: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+        textarea { width: 100%; resize: none; padding: 10px; font-family: monospace; font-size: 14px; }
+        input[type=text] { width: 300px; padding: 5px; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
+        .result-section { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RC5-CBC-Pad Шифрування</h1>
+
+        <!-- Форма для шифрування/дешифрування -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">
+                Виконати та завантажити файл
+            </button>
+        </form>
+
+        {% if result %}
+        <div class="result-section">
+            <h2>Результат для {{ filename }}</h2>
+            <textarea rows="15" readonly>{{ result }}</textarea>
+            <p>Файл автоматично буде завантажено після натискання кнопки.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
