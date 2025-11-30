@@ -10,7 +10,7 @@
         body { font-family: Arial; margin: 20px; background: #f4f4f4; }
         .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
         textarea { width: 100%; resize: none; padding: 10px; font-family: monospace; font-size: 14px; }
-        input[type=text] { width: 300px; padding: 5px; }
+        input[type=text], input[type=password] { width: 300px; padding: 5px; }
         button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
         .result-section { margin-top: 30px; }
     </style>
@@ -19,20 +19,22 @@
     <div class="container">
         <h1>RC5-CBC-Pad Шифрування</h1>
 
-        <!-- Форма для шифрування/дешифрування -->
+        <!-- Форма -->
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">
-                Виконати та завантажити файл
-            </button>
+            <button type="submit">Виконати та завантажити файл</button>
         </form>
 
-        {% if result %}
+        {% if result_text %}
         <div class="result-section">
             <h2>Результат для {{ filename }}</h2>
-            <textarea rows="15" readonly>{{ result }}</textarea>
-            <p>Файл автоматично буде завантажено після натискання кнопки.</p>
+            <textarea rows="15" readonly>{{ result_text }}</textarea>
+            <p>
+                <a href="data:application/octet-stream;base64,{{ result_text }}" download="{{ filename }}">
+                    Завантажити файл
+                </a>
+            </p>
         </div>
         {% endif %}
     </div>
