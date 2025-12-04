@@ -163,7 +163,7 @@
 
         {% if decrypted_data_base64 and cipher_type == "RSA" %}
         <div class="result-box">
-            <h3 class="font-bold text-lg text-gray-800 mb-2">📊 Результати розшифрування RSA:</h3>
+            <h3 class="font-bold text-lg text-gray-800 mb-2">Результати розшифрування RSA:</h3>
             <button onclick="downloadFile('{{ decrypted_data_base64 }}', '{{ decrypted_filename }}')"
                     class="btn-primary mt-4 w-full bg-red-700 hover:bg-red-800 transition duration-200">
                 Завантажити Розшифрований Файл ({{ decrypted_filename }})
