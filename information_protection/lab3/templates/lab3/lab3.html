@@ -46,16 +46,19 @@
         <div class="result-section">
             <h2>Результат для {{ filename }}</h2>
 
+
             {% if time_elapsed %}
-                {% with action_name=form.action.value %}
-                    {% if action_name == 'encrypt' %}
-                        {% with op_name="Шифрування" %}
-                            <div class="time-info">
-                                Операція: {{ op_name }} Час виконання: {{ time_elapsed }} секунд
-                            </div>
-                        {% endwith %}
-                    {% endif %}
-                {% endwith %}
+                <h3>Результати вимірювання часу:</h3>
+                <p>
+                    Час розширення ключа (Key Setup Time): <strong>{{ key_setup_time }}</strong> секунд.
+                </p>
+                <p>
+                    Час шифрування/розшифрування даних (Operation Time): <strong>{{ operation_time }}</strong> секунд.
+                </p>
+                <p>
+                    Загальний час виконання: <strong>{{ time_elapsed }}</strong> секунд.
+                </p>
+                <hr>
             {% endif %}
 
             <textarea rows="15" readonly>{{ result_text }}</textarea>

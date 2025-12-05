@@ -4,10 +4,10 @@ import hashlib
 import io
 from base64 import b64encode, b64decode
 from django.template import loader, TemplateDoesNotExist
-import time  # <--- ДОДАНО: Імпорт модуля time
+import time
 
 
-# --- Утилітарні функції (залишені без змін згідно з вимогою) ---
+# --- Утилітарні функції (залишені без змін) ---
 
 def md5_for_text(s: str) -> bytes:
     return hashlib.md5(s.encode()).digest()
@@ -121,7 +121,10 @@ def lab3_view(request):
     result_text = None
     out_name = None
     error = None
-    time_elapsed = None  # <--- ДОДАНО: Змінна для часу
+    # Оновлені змінні для часу
+    key_setup_time = None
+    operation_time = None
+    time_elapsed = None
 
     if request.method == 'POST' and 'file' in request.FILES:
         form = Lab3Form(request.POST, request.FILES)
@@ -140,9 +143,15 @@ def lab3_view(request):
             # Генерація ключа
             key_full = md5_for_text(password)
             key = key_full[:8]  # Використовуємо 8 байт (64 біти) ключа
-            S = expand_key(key, w=w, r=r)
 
-            start_time = time.perf_counter() # <--- ДОДАНО: Початок вимірювання часу
+            # 1. ВИМІРЮВАННЯ ЧАСУ РОЗШИРЕННЯ КЛЮЧА (Key Setup Time)
+            start_key_setup = time.perf_counter()
+            S = expand_key(key, w=w, r=r)
+            end_key_setup = time.perf_counter()
+            key_setup_time = end_key_setup - start_key_setup
+
+            # 2. ВИМІРЮВАННЯ ЧАСУ ШИФРУВАННЯ/РОЗШИФРУВАННЯ (Operation Time)
+            start_operation = time.perf_counter()
 
             if action == 'encrypt':
                 # --- Шифрування: RC5 у режимі CBC ---
@@ -174,10 +183,9 @@ def lab3_view(request):
 
                 # 4. Формування кінцевих байтів (IV + Ciphertext)
                 final_bytes = iv + bytes(ciphertext)
-                out_name = "enc_"+ uploaded.name
+                out_name = "enc_" + uploaded.name
 
                 # 5. Вивід: Base64-кодування для відображення в тексті
-                # Це виводить зашифровані дані (Base64-рядок)
                 result_text = b64encode(final_bytes).decode('ascii')
 
             else:  # decrypt
@@ -185,18 +193,15 @@ def lab3_view(request):
 
                 data_bytes = data
 
-                # 1. Спроба декодувати Base64, якщо файл був завантажений як Base64-текст
+                # 1. Спроба декодувати Base64
                 try:
                     txt = data.decode('utf-8').strip()
-                    # Припускаємо Base64, якщо це не чистий hex
                     if len(txt) > 0 and not all(c in "0123456789abcdefABCDEF" for c in txt):
-                        # data_bytes тепер містить бінарний шифртекст
                         data_bytes = b64decode(txt)
                 except Exception:
-                    # Якщо декодування не вдалося, залишаємо data_bytes як є (чисті бінарні дані).
                     pass
 
-                if len(data_bytes) < block_size + 1:  # IV + хоча б один байт
+                if len(data_bytes) < block_size + 1:
                     error = 'Файл занадто короткий, можливо, не є зашифрованим або пошкоджений.'
                     return render(request, template_name, {'form': form, 'error': error})
 
@@ -233,20 +238,22 @@ def lab3_view(request):
 
                 # 5. Формування імені файлу
                 out_name = uploaded.name
-                out_name = out_name
 
                 decoded_text = final_bytes.decode('cp1252')
-                # Заміна символів повернення каретки (\r\n) для чистого виводу тексту
                 result_text = decoded_text.replace('\r\n', '\n')
 
-            end_time = time.perf_counter() # <--- ДОДАНО: Кінець вимірювання часу
-            time_elapsed = end_time - start_time # <--- ДОДАНО: Обчислення часу
+            end_operation = time.perf_counter()
+            operation_time = end_operation - start_operation
+            time_elapsed = key_setup_time + operation_time  # Загальний час
 
             return render(request, template_name, {
                 'form': form,
                 'result_text': result_text,
                 'filename': out_name,
-                'time_elapsed': f"{time_elapsed:.6f}" # <--- ДОДАНО: Передача часу у контекст
+                # Передача часу Key Setup та Operation Time окремо
+                'key_setup_time': f"{key_setup_time:.6f}",
+                'operation_time': f"{operation_time:.6f}",
+                'time_elapsed': f"{time_elapsed:.6f}"  # Загальний час
             })
 
     else:
