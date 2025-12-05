@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC5 Шифрування/Дешифрування</title>
+    <link rel="stylesheet" href="{% static 'lab3/style.css' %}">
+    <style>
+        /* Стилі залишено без змін, як було в оригіналі */
+        body { font-family: Arial; margin: 20px; background: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+        textarea { width: 100%; resize: none; padding: 10px; font-family: monospace; font-size: 14px; }
+        input[type=text], input[type=password] { width: 300px; padding: 5px; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
+        .result-section { margin-top: 30px; }
+        .time-info { margin: 10px 0; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; border-left: 5px solid #007bff; }
+        .error-message { color: red; font-weight: bold; margin-bottom: 15px; border: 1px solid red; padding: 10px; background: #ffebeb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RC5-CBC-Pad Шифрування</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors or error %}
+                <div class="error-message">
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <p>Помилка форми: {{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                    {% if error %}
+                        <p>Помилка обробки: {{ error }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {{ form.as_p }}
+            <button type="submit">Виконати та завантажити файл</button>
+        </form>
+
+        {% if result_text %}
+        <div class="result-section">
+            <h2>Результат для {{ filename }}</h2>
+
+
+            {% if time_elapsed %}
+                <h3>Результати вимірювання часу:</h3>
+                <p>
+                    Час розширення ключа (Key Setup Time): <strong>{{ key_setup_time }}</strong> секунд.
+                </p>
+                <p>
+                    Час шифрування/розшифрування даних (Operation Time): <strong>{{ operation_time }}</strong> секунд.
+                </p>
+                <p>
+                    Загальний час виконання: <strong>{{ time_elapsed }}</strong> секунд.
+                </p>
+                <hr>
+            {% endif %}
+
+            <textarea rows="15" readonly>{{ result_text }}</textarea>
+            <p>
+                <a href="data:application/octet-stream;base64,{{ result_text }}" download="{{ filename }}">
+                    Завантажити файл
+                </a>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
