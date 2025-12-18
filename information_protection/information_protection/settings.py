@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'information_protection',
     'lcg',
     'lab2',
+
     'lab4',
+
+    'lab3',
+
     'rest_framework',
 ]
 
