@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна 5: Цифровий підпис DSS</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'lab5.css' %}">
+</head>
+<body>
+
+<h1>Робота з цифровим підписом DSS</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Путь для ключей (опционально):</label>
+    <input type="text" name="keys_path" placeholder="{{ default_path }}">
+
+    <input type="submit" name="action" value="generate_keys">
+
+    <hr>
+
+    <h3>Створення цифрового підпису</h3>
+    <label>Текст для підпису:</label>
+    <input type="text" name="text_input">
+
+    <label>Або файл:</label>
+    <input type="file" name="file_input">
+
+    <input type="submit" name="action" value="sign">
+
+    <hr>
+
+    <h3>Перевірка підпису</h3>
+    <label>Текст для перевірки:</label>
+    <input type="text" name="text_input">
+
+    <label>Або файл:</label>
+    <input type="file" name="file_input">
+
+    <label>Підпис (hex):</label>
+    <input type="text" name="signature_input">
+
+    <input type="submit" name="action" value="verify">
+</form>
+
+{% if result %}
+<div class="result">
+    <p><strong>Результат:</strong> {{ result }}</p>
+</div>
+{% endif %}
+
+{% if signature_hex %}
+<div class="result">
+    <p><strong>Підпис:</strong> {{ signature_hex }}</p>
+</div>
+{% endif %}
+
+{% if verification_result %}
+<div class="result">
+    <p>{{ verification_result }}</p>
+</div>
+{% endif %}
+
+</body>
+</html>
