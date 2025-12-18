@@ -38,12 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'information_protection',
     'lcg',
     'lab2',
-
     'lab4',
-
     'lab3',
     'lab5',
 
