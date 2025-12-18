@@ -4,7 +4,7 @@ from Crypto.PublicKey import DSA
 from Crypto.Signature import DSS
 from Crypto.Hash import SHA256
 
-FILES_DIR = r"information_protection\lab5\lab5"
+FILES_DIR = r"lab5\lab5"
 
 
 def digital_signature_tool(request):
