@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна 5: Цифровий підпис DSS</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #000033;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+        }
+
+        .form-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section h2 {
+            margin-top: 0;
+            color: #1565c0;
+            font-size: 1.3rem;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus {
+            border-color: #000033;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background: #000033;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        input[type="submit"]:hover {
+            background: #0d47a1;
+            transform: scale(1.03);
+        }
+
+        .result-section {
+            background: #f1f8e9;
+            border-left: 6px solid #43a047;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .result-section h2 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+
+        .result-section p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            word-wrap: break-word;
+        }
+
+        .result-section strong {
+            color: #1b5e20;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2rem 0;
+        }
+
+        .signature-display {
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Робота з цифровим підписом DSS</h1>
+</header>
+
+<div class="container">
+    <div class="form-section">
+        <h2>Генерація ключів DSS</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label>Шлях до ключів (необов'язково):</label>
+            <input type="text" name="keys_path" placeholder="{{ default_path }}">
+
+            <input type="submit" name="action" value="generate_keys">
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Створення цифрового підпису</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label>Текст для підпису:</label>
+            <input type="text" name="text_input">
+
+            <label>Або файл:</label>
+            <input type="file" name="file_input">
+
+            <input type="submit" name="action" value="sign">
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Перевірка підпису</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label>Текст для перевірки:</label>
+            <input type="text" name="text_input">
+
+            <label>Або файл:</label>
+            <input type="file" name="file_input">
+
+            <label>Підпис (hex):</label>
+            <input type="text" name="signature_input">
+
+            <input type="submit" name="action" value="verify">
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="result-section">
+        <h2>Результат</h2>
+        <p><strong>Статус:</strong> {{ result }}</p>
+    </div>
+    {% endif %}
+
+    {% if signature_hex %}
+    <div class="result-section">
+        <h2>Згенерований підпис</h2>
+        <p><strong>Підпис (hex):</strong></p>
+        <div class="signature-display">{{ signature_hex }}</div>
+    </div>
+    {% endif %}
+
+    {% if verification_result %}
+    <div class="result-section">
+        <h2>Результат перевірки</h2>
+        <p><strong>{{ verification_result }}</strong></p>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
