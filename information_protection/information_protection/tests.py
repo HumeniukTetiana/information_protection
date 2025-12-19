@@ -11,21 +11,17 @@ class Lab1LCGTests(TestCase):
     """Тести для Лабораторної роботи №1 - LCG генератор"""
 
     def setUp(self):
-        """Підготовка до тестів"""
         self.client = Client()
-        # Припускаємо, що URL для lab1 це 'lcg'
-        # Змініть на актуальний URL якщо потрібно
-        self.url = reverse('lcg')  # або '/lcg/' якщо reverse не працює
+        self.url = reverse('lcg:lcg')
 
     def test_lcg_page_loads(self):
-        """Тест: Перевірка що сторінка LCG завантажується"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lcg/lcg.html')
 
     def test_gcd_function(self):
         """Тест: Перевірка функції НСД (gcd)"""
-        from lab1.views import gcd  # Змініть на актуальний import
+        from lcg.views import gcd  # Змініть на актуальний import
 
         self.assertEqual(gcd(48, 18), 6)
         self.assertEqual(gcd(100, 50), 50)
@@ -34,7 +30,7 @@ class Lab1LCGTests(TestCase):
 
     def test_lcg_numbers_generation(self):
         """Тест: Перевірка генерації чисел LCG"""
-        from lab1.views import lcg_numbers
+        from lcg.views import lcg_numbers
 
         m = 2 ** 13 - 1
         a = 5 ** 5
@@ -54,7 +50,7 @@ class Lab1LCGTests(TestCase):
 
     def test_lcg_period_calculation(self):
         """Тест: Перевірка обчислення періоду LCG"""
-        from lab1.views import lcg_period
+        from lcg.views import lcg_period
 
         m = 2 ** 13 - 1
         a = 5 ** 5
@@ -70,7 +66,7 @@ class Lab1LCGTests(TestCase):
 
     def test_cesaro_estimate(self):
         """Тест: Перевірка методу Чезаро для оцінки π"""
-        from lab1.views import cesaro
+        from lcg.views import cesaro
 
         # Велика кількість ітерацій для кращої точності
         numbers = list(range(1, 1000))
@@ -117,12 +113,10 @@ class Lab2MD5Tests(TestCase):
     """Тести для Лабораторної роботи №2 - MD5 хешування"""
 
     def setUp(self):
-        """Підготовка до тестів"""
         self.client = Client()
-        self.url = reverse('lab2')  # або '/lab2/' якщо потрібно
+        self.url = reverse('lab2:lab2')  # Используем namespace lab2
 
     def test_md5_page_loads(self):
-        """Тест: Перевірка що сторінка MD5 завантажується"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lab2/lab2.html')
@@ -246,12 +240,10 @@ class Lab3RC5Tests(TestCase):
     """Тести для Лабораторної роботи №3 - RC5 шифрування"""
 
     def setUp(self):
-        """Підготовка до тестів"""
         self.client = Client()
-        self.url = reverse('lab3')  # або '/lab3/' якщо потрібно
+        self.url = reverse('lab3:lab3')  # Используем namespace lab3
 
     def test_rc5_page_loads(self):
-        """Тест: Перевірка що сторінка RC5 завантажується"""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lab3/lab3.html')
@@ -443,33 +435,32 @@ class Lab3RC5Tests(TestCase):
 
 
 # Інтеграційні тести
-class IntegrationTests(TestCase):
-    """Інтеграційні тести для перевірки взаємодії між компонентами"""
+def test_md5_and_rc5_integration(self):
+    from lab3.views import md5_for_text, expand_key
 
-    def test_md5_and_rc5_integration(self):
-        """Тест: Інтеграція MD5 (для ключа) та RC5 (для шифрування)"""
-        from lab3.views import md5_for_text, expand_key
+    password = 'integration_test'
+    key_full = md5_for_text(password)
+    key = key_full[:8]
 
-        password = 'integration_test'
-        key_full = md5_for_text(password)
-        key = key_full[:8]
+    S = expand_key(key, w=16, r=20)
 
-        S = expand_key(key, w=16, r=20)
+    self.assertIsNotNone(S)
+    self.assertEqual(len(S), 42)
 
-        self.assertIsNotNone(S)
-        self.assertEqual(len(S), 42)  # 2*(20+1)
 
-    def test_all_pages_accessible(self):
-        """Тест: Перевірка доступності всіх сторінок"""
-        urls = [
-            reverse('lcg'),  # або '/lcg/'
-            reverse('lab2'),  # або '/lab2/'
-            reverse('lab3'),  # або '/lab3/'
-        ]
+def test_all_pages_accessible(self):
+    """Проверка доступности всех страниц"""
+    urls = [
+        reverse('lcg:lcg'),
+        reverse('lab2:lab2'),
+        reverse('lab3:lab3'),
+        reverse('lab4:lab4_rsa'),
+        reverse('lab5:lab5'),
+    ]
 
-        for url in urls:
-            try:
-                response = self.client.get(url)
-                self.assertIn(response.status_code, [200, 301, 302])
-            except Exception as e:
-                self.fail(f"Failed to access {url}: {str(e)}")
+    for url in urls:
+        try:
+            response = self.client.get(url)
+            self.assertIn(response.status_code, [200, 301, 302])
+        except Exception as e:
+            self.fail(f"Failed to access {url}: {str(e)}")

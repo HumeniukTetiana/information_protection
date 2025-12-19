@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('lab1/', include('lcg.urls')),
+    path('lab1/', include(('lcg.urls', 'lcg'), namespace='lcg')),
+
     path('lab2/', include('lab2.urls')),
 
     # path('lab3/', include('lab3.urls')),

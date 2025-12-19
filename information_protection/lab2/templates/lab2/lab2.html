@@ -16,7 +16,7 @@
         <!-- Хешування рядка -->
         <section class="form-section">
             <h2>Обчислити MD5 для рядка</h2>
-            <form method="post" action="{% url 'lab2' %}">
+            <form method="post" action="{% url 'lab2:lab2' %}">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="hash_text">
                 <label for="text">Введіть рядок:</label>
@@ -28,7 +28,7 @@
         <!-- Хешування файлу -->
         <section class="form-section">
             <h2>Обчислити MD5 для файлу</h2>
-            <form method="post" action="{% url 'lab2' %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'lab2:lab2' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="hash_file">
                 <label for="file">Оберіть файл:</label>
@@ -40,7 +40,7 @@
         <!-- Перевірка файлу -->
         <section class="form-section">
             <h2>Перевірка цілісності файлу</h2>
-            <form method="post" action="{% url 'lab2' %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'lab2:lab2' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="verify">
                 <label for="file2">Файл для перевірки:</label>
@@ -86,7 +86,7 @@
             </div>
             {% endif %}
 
-            <form method="post" action="{% url 'download_md5' %}">
+            <form method="post" action="{% url 'lab2:download_md5' %}">
                 {% csrf_token %}
                 <input type="hidden" name="md5" value="{{ md5 }}">
                 <input type="hidden" name="name" value="{{ name }}">
